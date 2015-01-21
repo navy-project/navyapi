@@ -1,11 +1,12 @@
 package client
 
 import (
-	"bitbucket.org/navy-project/navyapi/api"
 	"encoding/json"
-  "strings"
-  "net/http"
-  "errors"
+	"errors"
+	"net/http"
+	"strings"
+
+	"github.com/navy-project/navyapi/api"
 )
 
 type Client struct {
@@ -18,25 +19,25 @@ func NewClient(address string) *Client {
 }
 
 func (c *Client) delete(path string) error {
-  url := c.BaseAddr + path
+	url := c.BaseAddr + path
 
-  //fmt.Println("Requesting: DELETE " + url)
+	//fmt.Println("Requesting: DELETE " + url)
 
-  request, err := http.NewRequest("DELETE", url, nil)
+	request, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
-    return err
+		return err
 	}
 
-  resp, err := http.DefaultClient.Do(request)
-  if err != nil {
-    return err
-  }
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return err
+	}
 
-  if resp.StatusCode >= 400 {
-    return errors.New("Error - " + resp.Status)
-  }
+	if resp.StatusCode >= 400 {
+		return errors.New("Error - " + resp.Status)
+	}
 
-  return nil
+	return nil
 }
 
 func (c *Client) postJSON(path string, object interface{}) error {
@@ -45,31 +46,31 @@ func (c *Client) postJSON(path string, object interface{}) error {
 		return err
 	}
 
-  body := strings.NewReader(string(b))
-  url := c.BaseAddr + path
+	body := strings.NewReader(string(b))
+	url := c.BaseAddr + path
 
-  //fmt.Println("Requesting: POST " + url)
+	//fmt.Println("Requesting: POST " + url)
 
-  request, err := http.NewRequest("POST", url, body)
+	request, err := http.NewRequest("POST", url, body)
 	if err != nil {
-    return err
+		return err
 	}
 
-  resp, err := http.DefaultClient.Do(request)
-  if err != nil {
-    return err
-  }
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return err
+	}
 
-  if resp.StatusCode >= 400 {
-    return errors.New("Error - " + resp.Status)
-  }
+	if resp.StatusCode >= 400 {
+		return errors.New("Error - " + resp.Status)
+	}
 
-  return nil
+	return nil
 }
 
 func (c *Client) CreateConvoy(name, manifest string) error {
 	command := api.ConvoyRequest{name, manifest}
-  return c.postJSON("/convoys", command)
+	return c.postJSON("/convoys", command)
 }
 
 func (c *Client) DeleteConvoy(name string) error {
